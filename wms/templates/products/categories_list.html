@@ -1,0 +1,32 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Kategoriler - WMS{% endblock %}
+{% block page_title %}Kategoriler{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="text-muted">Toplam: {{ categories|length }}</div>
+  <a class="btn btn-sm btn-primary" href="{{ url_for('products.categories_new') }}">Yeni Kategori</a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ad</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in categories %}
+          <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.name }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

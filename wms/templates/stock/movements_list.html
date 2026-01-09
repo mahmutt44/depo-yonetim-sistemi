@@ -1,0 +1,52 @@
+{% extends 'staff/base_staff.html' %}
+
+{% block title %}Stok Hareketleri - WMS{% endblock %}
+{% block page_title %}Stok Hareketleri{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="text-muted">Toplam: {{ movements|length }}</div>
+  <a class="btn btn-sm btn-primary" href="{{ url_for('stock.movements_new') }}">Yeni Hareket</a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>Tarih</th>
+          <th>Ürün</th>
+          <th>Depo</th>
+          <th>Raf</th>
+          <th>Tip</th>
+          <th class="text-end">Miktar</th>
+          <th>Referans</th>
+          <th>Sebep</th>
+          <th>Oluşturan</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in movements %}
+          <tr>
+            <td>{{ m.created_at.strftime('%Y-%m-%d %H:%M') if m.created_at else '-' }}</td>
+            <td>{{ m.product.name }} ({{ m.product.sku }})</td>
+            <td>{{ m.warehouse.name }}</td>
+            <td>{{ m.shelf.code if m.shelf else '-' }}</td>
+            <td>{{ m.movement_type }}</td>
+            <td class="text-end">
+              {% if m.movement_type == 'OUT' %}
+                {{ '%.2f'|format(-1 * (m.quantity or 0)) }}
+              {% else %}
+                {{ '%.2f'|format(m.quantity or 0) }}
+              {% endif %}
+            </td>
+            <td>{{ m.reference_type }}</td>
+            <td>{{ m.reason or '-' }}</td>
+            <td>{{ m.user.username if m.user else '-' }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

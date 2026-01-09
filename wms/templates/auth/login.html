@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Giriş - WMS{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h1 class="h4 mb-3">Giriş</h1>
+
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, msg in messages %}
+                <div class="alert alert-{{ category }}">{{ msg }}</div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+
+          <form method="post">
+            {{ form.csrf_token }}
+
+            <div class="mb-3">
+              {{ form.username.label(class_='form-label') }}
+              {{ form.username(class_='form-control') }}
+            </div>
+            <div class="mb-3">
+              {{ form.password.label(class_='form-label') }}
+              {{ form.password(class_='form-control') }}
+            </div>
+            <div class="d-grid">
+              {{ form.submit(class_='btn btn-primary') }}
+            </div>
+
+            <div class="text-muted small mt-3">
+              Seed sonrası: admin/admin123, personel/personel123
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

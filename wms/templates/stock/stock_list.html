@@ -1,0 +1,36 @@
+{% extends 'staff/base_staff.html' %}
+
+{% block title %}Stok - WMS{% endblock %}
+{% block page_title %}Stok{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="text-muted">Toplam satır: {{ levels|length }}</div>
+  <a class="btn btn-sm btn-primary" href="{{ url_for('stock.movements_new') }}">Giriş / Çıkış / Düzeltme</a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>Ürün</th>
+          <th>Depo</th>
+          <th>Raf</th>
+          <th class="text-end">Miktar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for l in levels %}
+          <tr>
+            <td>{{ l.product.name }} ({{ l.product.sku }})</td>
+            <td>{{ l.warehouse.name }}</td>
+            <td>{{ l.shelf.code if l.shelf else '-' }}</td>
+            <td class="text-end">{{ '%.2f'|format(l.quantity or 0) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

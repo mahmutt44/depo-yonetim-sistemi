@@ -1,0 +1,48 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Ürünler - WMS{% endblock %}
+{% block page_title %}Ürünler{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="text-muted">Toplam: {{ products|length }}</div>
+  <a class="btn btn-sm btn-primary" href="{{ url_for('products.products_new') }}">Yeni Ürün</a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ad</th>
+          <th>SKU</th>
+          <th>Kategori</th>
+          <th>Birim</th>
+          <th>Min Stok</th>
+          <th>Durum</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+          <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.sku }}</td>
+            <td>{{ p.category.name if p.category else '-' }}</td>
+            <td>{{ p.unit.short_code if p.unit else '-' }}</td>
+            <td>{{ p.min_stock_level }}</td>
+            <td>
+              {% if p.is_active %}
+                <span class="badge text-bg-success">Aktif</span>
+              {% else %}
+                <span class="badge text-bg-secondary">Pasif</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

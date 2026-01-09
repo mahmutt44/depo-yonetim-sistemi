@@ -1,0 +1,97 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Satın Alma #{{ purchase.id }} - WMS{% endblock %}
+{% block page_title %}Satın Alma #{{ purchase.id }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="text-muted">
+    {{ purchase.supplier.name if purchase.supplier else '-' }} / {{ purchase.warehouse.name if purchase.warehouse else '-' }}
+    {% if purchase.shelf %} / {{ purchase.shelf.code }}{% endif %}
+  </div>
+  <div>
+    {% if purchase.status != 'RECEIVED' %}
+      <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('purchases.purchases_edit', purchase_id=purchase.id) }}">Düzenle</a>
+      <form method="post" action="{{ url_for('purchases.purchases_receive', purchase_id=purchase.id) }}" class="d-inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-sm btn-success" type="submit">Teslim Al (Stok Girişi)</button>
+      </form>
+    {% else %}
+      <span class="badge text-bg-success">RECEIVED</span>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">Kalemler</div>
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th>Ürün</th>
+              <th class="text-end">Miktar</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for it in items %}
+              <tr>
+                <td>{{ it.product.name }} ({{ it.product.sku }})</td>
+                <td class="text-end">{{ '%.2f'|format(it.quantity or 0) }}</td>
+                <td class="text-end">
+                  {% if purchase.status != 'RECEIVED' %}
+                    <form method="post" action="{{ url_for('purchases.purchase_item_delete', purchase_id=purchase.id, item_id=it.id) }}" class="d-inline">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                      <button class="btn btn-sm btn-outline-danger" type="submit">Sil</button>
+                    </form>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+            {% if not items %}
+              <tr>
+                <td colspan="3" class="text-muted">Henüz kalem eklenmedi.</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">Kalem Ekle</div>
+      <div class="card-body">
+        {% if purchase.status == 'RECEIVED' %}
+          <div class="text-muted">Teslim alındığı için değiştirilemez.</div>
+        {% else %}
+          <form method="post" action="{{ url_for('purchases.purchase_items_add', purchase_id=purchase.id) }}">
+            {{ item_form.csrf_token }}
+
+            <div class="mb-3">
+              {{ item_form.product_id.label(class_='form-label') }}
+              {{ item_form.product_id(class_='form-select') }}
+            </div>
+            <div class="mb-3">
+              {{ item_form.quantity.label(class_='form-label') }}
+              {{ item_form.quantity(class_='form-control') }}
+            </div>
+
+            {{ item_form.submit(class_='btn btn-primary') }}
+          </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header">Not</div>
+      <div class="card-body">
+        <div class="text-muted">{{ purchase.note or '-' }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

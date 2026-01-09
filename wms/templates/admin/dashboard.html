@@ -1,0 +1,50 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Dashboard - WMS{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-muted">Toplam Ürün</div>
+        <div class="fs-3 fw-semibold">{{ total_products or 0 }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-muted">Toplam Depo</div>
+        <div class="fs-3 fw-semibold">{{ total_warehouses or 0 }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-muted">Bugünkü Hareketler</div>
+        <div class="d-flex gap-4">
+          <div>
+            <div class="small text-muted">Giriş</div>
+            <div class="fs-3 fw-semibold">{{ today_in_count or 0 }}</div>
+          </div>
+          <div>
+            <div class="small text-muted">Çıkış</div>
+            <div class="fs-3 fw-semibold">{{ today_out_count or 0 }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card border-warning">
+      <div class="card-body">
+        <div class="text-muted">Kritik Stok Uyarısı</div>
+        <div class="fs-3 fw-semibold">{{ critical_products or 0 }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

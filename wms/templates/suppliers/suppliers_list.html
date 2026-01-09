@@ -1,0 +1,52 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Tedarikçiler - WMS{% endblock %}
+{% block page_title %}Tedarikçiler{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="text-muted">Toplam: {{ suppliers|length }}</div>
+  <a class="btn btn-sm btn-primary" href="{{ url_for('suppliers.suppliers_new') }}">Yeni Tedarikçi</a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ad</th>
+          <th>Telefon</th>
+          <th>E-posta</th>
+          <th>Durum</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in suppliers %}
+          <tr>
+            <td>{{ s.id }}</td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.phone or '' }}</td>
+            <td>{{ s.email or '' }}</td>
+            <td>
+              {% if s.is_active %}
+                <span class="badge text-bg-success">Aktif</span>
+              {% else %}
+                <span class="badge text-bg-secondary">Pasif</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('suppliers.suppliers_edit', supplier_id=s.id) }}">Düzenle</a>
+              <form method="post" action="{{ url_for('suppliers.suppliers_toggle', supplier_id=s.id) }}" class="d-inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn btn-sm btn-outline-secondary" type="submit">Durum</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

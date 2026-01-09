@@ -1,0 +1,49 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Depolar - WMS{% endblock %}
+{% block page_title %}Depolar{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="text-muted">Toplam: {{ warehouses|length }}</div>
+  <a class="btn btn-sm btn-primary" href="{{ url_for('warehouses.warehouses_new') }}">Yeni Depo</a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ad</th>
+          <th>Durum</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for w in warehouses %}
+          <tr>
+            <td>{{ w.id }}</td>
+            <td>{{ w.name }}</td>
+            <td>
+              {% if w.is_active %}
+                <span class="badge text-bg-success">Aktif</span>
+              {% else %}
+                <span class="badge text-bg-secondary">Pasif</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('warehouses.shelves_list', warehouse_id=w.id) }}">Raflar</a>
+              <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('warehouses.warehouses_edit', warehouse_id=w.id) }}">Düzenle</a>
+              <form method="post" action="{{ url_for('warehouses.warehouses_toggle', warehouse_id=w.id) }}" class="d-inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn btn-sm btn-outline-secondary" type="submit">Durum</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

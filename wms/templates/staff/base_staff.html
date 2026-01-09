@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand">WMS</div>
+    <nav class="nav flex-column">
+      <a class="nav-link" href="{{ url_for('stock.stock_list') }}">Stok</a>
+      <a class="nav-link" href="{{ url_for('stock.movements_list') }}">Hareketler</a>
+      <a class="nav-link" href="{{ url_for('auth.logout') }}">Çıkış</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title">{% block page_title %}{% endblock %}</div>
+      <div class="topbar-user">{{ current_user.username }}</div>
+    </div>
+
+    <div class="container-fluid py-3">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, msg in messages %}
+            <div class="alert alert-{{ category }}">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% endblock %}

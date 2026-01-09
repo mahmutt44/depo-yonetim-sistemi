@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand">WMS</div>
+    <nav class="nav flex-column">
+      <a class="nav-link" href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+      <a class="nav-link" href="{{ url_for('reports.index') }}">Raporlar</a>
+      <a class="nav-link" href="{{ url_for('units.units_list') }}">Birimler</a>
+      <a class="nav-link" href="{{ url_for('suppliers.suppliers_list') }}">Tedarikçiler</a>
+      <a class="nav-link" href="{{ url_for('customers.customers_list') }}">Müşteriler</a>
+      <a class="nav-link" href="{{ url_for('purchases.purchases_list') }}">Satın Almalar</a>
+      <a class="nav-link" href="{{ url_for('warehouses.warehouses_list') }}">Depolar</a>
+      <a class="nav-link" href="{{ url_for('products.products_list') }}">Ürünler</a>
+      <a class="nav-link" href="{{ url_for('products.categories_list') }}">Kategoriler</a>
+      <a class="nav-link" href="{{ url_for('auth.logout') }}">Çıkış</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title">{% block page_title %}{% endblock %}</div>
+      <div class="topbar-user">{{ current_user.username }}</div>
+    </div>
+
+    <div class="container-fluid py-3">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, msg in messages %}
+            <div class="alert alert-{{ category }}">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% endblock %}

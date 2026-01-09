@@ -1,0 +1,63 @@
+{% extends 'staff/base_staff.html' %}
+
+{% block title %}Stok Hareketi - WMS{% endblock %}
+{% block page_title %}Stok Hareketi{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <form method="post">
+      {{ form.csrf_token }}
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          {{ form.product_id.label(class_='form-label') }}
+          {{ form.product_id(class_='form-select') }}
+        </div>
+        <div class="col-md-3">
+          {{ form.warehouse_id.label(class_='form-label') }}
+          {{ form.warehouse_id(class_='form-select') }}
+        </div>
+        <div class="col-md-3">
+          {{ form.shelf_id.label(class_='form-label') }}
+          {{ form.shelf_id(class_='form-select') }}
+          <div class="form-text">Raf seçimi opsiyoneldir.</div>
+        </div>
+
+        <div class="col-md-3">
+          {{ form.movement_type.label(class_='form-label') }}
+          {{ form.movement_type(class_='form-select') }}
+        </div>
+        <div class="col-md-3">
+          {{ form.quantity.label(class_='form-label') }}
+          {{ form.quantity(class_='form-control') }}
+          <div class="form-text">ADJUST seçiliyse buraya hedef stok yazılır.</div>
+        </div>
+        <div class="col-md-6">
+          {{ form.reference_type.label(class_='form-label') }}
+          {{ form.reference_type(class_='form-select') }}
+        </div>
+
+        <div class="col-md-12">
+          {{ form.reason.label(class_='form-label') }}
+          {{ form.reason(class_='form-control') }}
+        </div>
+
+        <div class="col-md-12">
+          {{ form.note.label(class_='form-label') }}
+          {{ form.note(class_='form-control', rows=3) }}
+        </div>
+      </div>
+
+      <div class="mt-3">
+        {{ form.submit(class_='btn btn-primary') }}
+        <a class="btn btn-link" href="{{ url_for('stock.stock_list') }}">Vazgeç</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/stock.js') }}"></script>
+{% endblock %}
